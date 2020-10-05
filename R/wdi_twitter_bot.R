@@ -164,8 +164,16 @@ for (ind in indicators_selected_df$indicator_id) {
   indicator_name <- indicators_selected_df$indicator[row] #get indicator name
   indicator_descript <- indicators_selected_df$indicator_desc[row] #get indicator description
   
+  #get topics
+  indicator_topic <- indicators_selected_df$topics[row][[1]] %>%
+    mutate(value=str_remove_all(value," "),
+           value=paste("#",value, sep=""))
+  
+  indicator_topic <- paste(indicator_topic$value, collapse = " ")
+  
+  
   title <- paste(indicator_name)
-  text <- paste(indicator_descript, ' Learn more at https://data.worldbank.org/indicator/',ind, sep="")
+  text <- paste( indicator_descript,indicator_topic, '. Learn more at https://data.worldbank.org/indicator/',ind, sep="")
   #get data
 
   #pull data
