@@ -56,8 +56,7 @@ wdi_mapper  <- function(data, indicator, title,text) {
   
   map_df <- get(data)
   
-  #randomly choose either a map, bar chart by region , or bar chart by income
-  rand_num <- sample(1:3, 1)
+
   
   if (rand_num==1) {
       p <- ggplot() +
@@ -142,6 +141,15 @@ wdi_mapper  <- function(data, indicator, title,text) {
 }
 
 
+
+###
+# Tweet
+###
+
+#open original database of tweets
+final_tweet_df<- read_csv( paste(dir,'tweets_database.csv',sep="/"))
+
+#choose 5 randomly selected indicators
 indicators_selected_df <- indicator_metadata %>%
   sample_n(5)
 
@@ -195,20 +203,49 @@ for (ind in indicators_selected_df$indicator_id) {
     ungroup() %>%
     summarise(pop_cov=sum(population, na.rm=T)/max(total_pop))
     
+  #randomly choose either a map, bar chart by region , or bar chart by income
+  rand_num <- sample(1:3, 1)
   
   #make sure popualation coverage at least 40%
   if (pop_cov$pop_cov >= 0.4) {
     
     wdi_mapper('wdi_df',ind,title,text )
+    
+    ####
+    # save info to csv
+    ####
+    
+    ## lookup status_id
+    my_timeline <- get_timeline(rtweet:::home_user())
+    
+    ## ID for reply
+    tweet_id <- my_timeline$status_id[1]
+    
+    tweet_df <- data.frame(
+      
+      indicator_id=ind,
+      indicator_name=indicator_name,
+      indicator_descript=indicator_descript,
+      text=text,
+      tweet_id=as.numeric(tweet_id),
+      tweet_rand_num=rand_num
+      
+    )
+    
+    final_tweet_df <- final_tweet_df %>%
+      bind_rows(tweet_df)
   
   }
   
+  
+  
+
+  
 }
 
+write_excel_csv(final_tweet_df, paste(dir,'tweets_database.csv',sep="/"))
 
-tmp <- tempfile(fileext = ".png")
-
-
-#write indicator to csv
-
+## like tweets referencing World Development Indicators
+# rt <- search_tweets("World Development Indicators")
+# r <- lapply(rt$user_id, post_favorite)
 
