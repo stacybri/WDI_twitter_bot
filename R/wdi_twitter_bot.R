@@ -151,7 +151,7 @@ final_tweet_df<- read_csv( paste(dir,'tweets_database.csv',sep="/"))
 
 #choose 5 randomly selected indicators
 indicators_selected_df <- indicator_metadata %>%
-  sample_n(5)
+  sample_n(2)
 
 #population data
 pop_df <- wb_data(
@@ -182,6 +182,12 @@ for (ind in indicators_selected_df$indicator_id) {
   
   title <- paste(indicator_name)
   text <- paste( indicator_descript,indicator_topic, '. Learn more at https://data.worldbank.org/indicator/',ind, sep="")
+  
+  #check if text is more than 280 characters
+  if (nchar(text)>280) {
+    text <- paste( title,indicator_topic, '. Learn more at https://data.worldbank.org/indicator/',ind, sep="")
+  }
+  
   #get data
 
   #pull data
@@ -204,7 +210,7 @@ for (ind in indicators_selected_df$indicator_id) {
     summarise(pop_cov=sum(population, na.rm=T)/max(total_pop))
     
   #randomly choose either a map, bar chart by region , or bar chart by income
-  rand_num <- sample(1:3, 1)
+  rand_num <- sample(1:3,1)
   
   #make sure popualation coverage at least 40%
   if (pop_cov$pop_cov >= 0.4) {
