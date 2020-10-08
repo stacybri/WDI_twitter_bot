@@ -173,9 +173,15 @@ for (ind in indicators_selected_df$indicator_id) {
   indicator_descript <- indicators_selected_df$indicator_desc[row] #get indicator description
   
   #get topics
-  indicator_topic <- indicators_selected_df$topics[row][[1]] %>%
-    mutate(value=str_remove_all(value," "),
-           value=paste("#",value, sep=""))
+  indicator_topic <- indicators_selected_df$topics[row][[1]] 
+  
+  if (nrow(indicator_topic)>0) {
+    indicator_topic <- indicator_topic %>%
+      mutate(value=str_remove_all(value," "),
+             value=paste("#",value, sep=""))
+  } else {
+    indicator_topic <- ""
+  }
   
   indicator_topic <- paste(indicator_topic$value, collapse = " ")
   
