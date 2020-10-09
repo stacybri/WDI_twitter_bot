@@ -11,6 +11,7 @@ library(here)
 library(wbstats)
 library(Hmisc)
 library(ggthemes)
+library(scales)
 
 gc()
 
@@ -72,7 +73,8 @@ wdi_mapper  <- function(data, indicator, title,text) {
         scale_x_continuous(expand = c(0, 0), limits = standard_crop_wintri()$xlim) +
         scale_y_continuous(expand = c(0, 0), limits = standard_crop_wintri()$ylim) +
         scale_fill_distiller(palette = "Blues",
-                             direction=1
+                             direction=1,
+                             breaks = pretty_breaks(n = 5)
                              )  +
         coord_equal() +
         theme_map(base_size=12) +
