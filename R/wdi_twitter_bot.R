@@ -12,7 +12,7 @@ library(wbstats)
 library(Hmisc)
 library(ggthemes)
 library(scales)
-
+library(hrbrthemes)
 gc()
 
 #set working directory
@@ -128,6 +128,43 @@ wdi_mapper  <- function(data, indicator, title,text) {
     theme_bw() +
     theme(legend.position = 'top')
 
+  }  else if (rand_num==4) {
+    #stacked area plot by region
+    
+    #pull data
+    wdi_df <- wb_data(
+      indicator=ind,
+      country='regions_only',
+      start_date=2000,
+      end_date=2020,
+      mrv=20,
+      gapfill=TRUE,
+      return_wide = F
+    ) 
+    
+    
+    
+    
+    p <- wdi_df %>%
+      arrange(-date) %>%
+      mutate(
+        Label = if_else(date %in% c(last(date),first(date)),
+                        paste(scales::comma(value, accuracy=0.1)),
+                        "")) %>%
+      ggplot(aes(x=date, y=value, fill=country, label=Label)) +
+      geom_area() +
+      geom_text(size = 4, position = position_stack(vjust = 0.5)) +
+      labs(
+        title=str_wrap(paste(title, 'By Region', sep=" - "),80),
+        caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
+        subtitle= 'Data Point is for last year available',
+        fill='Region'
+      ) +
+      ylab('value') +
+      scale_fill_tableau() +
+      theme_ipsum() +
+      theme(legend.position = 'top')
+    
   }
 
   
@@ -218,7 +255,7 @@ for (ind in indicators_selected_df$indicator_id) {
     summarise(pop_cov=sum(population, na.rm=T)/max(total_pop))
     
   #randomly choose either a map, bar chart by region , or bar chart by income
-  rand_num <- sample(1:3,1)
+  rand_num <- sample(1:4,1)
   
   #make sure popualation coverage at least 40%
   if (pop_cov$pop_cov >= 0.4) {
