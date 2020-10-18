@@ -142,7 +142,17 @@ wdi_mapper  <- function(data, indicator, title,text) {
       return_wide = F
     ) 
     
-    
+    if (length(unique(wdi_df$country))<2) {
+      wdi_df <- wb_data(
+        indicator=ind,
+        country='admin_regions_only',
+        start_date=2000,
+        end_date=2020,
+        mrv=20,
+        gapfill=TRUE,
+        return_wide = F
+      ) 
+    } #try admin regions for data
     
     
     p <- wdi_df %>%
