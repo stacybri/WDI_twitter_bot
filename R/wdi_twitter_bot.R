@@ -5,7 +5,7 @@ library(tidyverse)
 library(wbggeo)
 library(wbgmaps)
 library(ggthemes)
-
+library(gganimate)
 #others
 library(here)
 library(wbstats)
@@ -83,7 +83,7 @@ wdi_mapper  <- function(data, indicator, title,text) {
           subtitle= 'Data Point is for last year available',
           caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
           fill='WDI Indicator Value'
-    )
+            )
   } else if (rand_num==2) {
   #add histogram by region 
       p <- map_df %>%
@@ -175,14 +175,60 @@ wdi_mapper  <- function(data, indicator, title,text) {
       theme_ipsum() +
       theme(legend.position = 'top')
     
+  } else if (rand_num==5) {
+    wdi_df <- wb_data(
+      indicator=ind,
+      country='countries_only',
+      start_date=2000,
+      end_date=2020,
+      mrv=20,
+      gapfill=TRUE,
+      return_wide = F
+    ) %>%
+      mutate(date=as.integer(date))
+    
+    p <- ggplot() +
+      geom_map(data = wdi_df, aes(map_id = iso3c, fill = value, group=date), map = maps$countries) + 
+      geom_polygon(data = maps$disputed, aes(long, lat, group = group), fill = "grey80") + 
+      geom_polygon(data = maps$lakes, aes(long, lat, group = group), fill = "white")  +
+      geom_path(data = maps$boundaries,
+                aes(long, lat, group = group),
+                color = "white",
+                size = 0.1,
+                lineend = maps$boundaries$lineend,
+                linetype = maps$boundaries$linetype) +
+      scale_x_continuous(expand = c(0, 0), limits = standard_crop_wintri()$xlim) +
+      scale_y_continuous(expand = c(0, 0), limits = standard_crop_wintri()$ylim) +
+      scale_fill_distiller(palette = "Blues",
+                           direction=1,
+                           breaks = pretty_breaks(n = 5)
+      )  +
+      coord_equal() +
+      theme_map(base_size=12) +
+      labs(
+        title=str_wrap(title,100),
+        subtitle= "Year: {frame_time}",
+        caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
+        fill='WDI Indicator Value'
+      ) +
+      transition_time(date)
+    
+    
   }
 
   
  
  
  tmp <- tempfile(fileext = ".png")
- ggsave(tmp, p, width=10, height=8)
  
+ if (rand_num!=5) {
+  ggsave(tmp, p, width=10, height=8)
+ } else if (rand_num==5) {
+   
+   animate(p, nframes=100, width=800, height=600 )
+   anim_save(tmp)
+   
+ }
 
  post_tweet(status=text,
             media=tmp)
@@ -265,7 +311,7 @@ for (ind in indicators_selected_df$indicator_id) {
     summarise(pop_cov=sum(population, na.rm=T)/max(total_pop))
     
   #randomly choose either a map, bar chart by region , or bar chart by income
-  rand_num <- sample(1:4,1)
+  rand_num <- sample(1:5,1)
   
   #make sure popualation coverage at least 40%
   if (pop_cov$pop_cov >= 0.4) {
