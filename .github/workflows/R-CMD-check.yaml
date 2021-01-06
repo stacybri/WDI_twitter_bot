@@ -17,7 +17,6 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    env:
       RENV_PATHS_ROOT: ~/.local/share/renv
     steps:
       - uses: actions/checkout@v2
