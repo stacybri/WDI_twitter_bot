@@ -26,6 +26,8 @@ jobs:
       - name: Install github packages
         run:
           Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbggeo")"
+      - name: Install github packages2
+        run:
           Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps")"
       - name: Render r plot file
         run:
