@@ -45,6 +45,7 @@ jobs:
           install.packages('Hmisc')
           install.packages('ggthemes')
           install.packages('scales')
+          install.packages('gdtools')
           install.packages('hrbrthemes')
       - name: Render r plot file
         run:
