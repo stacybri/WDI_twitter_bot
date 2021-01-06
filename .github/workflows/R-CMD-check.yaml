@@ -32,7 +32,9 @@ jobs:
         shell: Rscript {0}
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::init()
+          renv::install('wbggeo')
+          renv::install('wbgmaps')
+          renv::restore()
       - name: Render r plot file
         run:
           Rscript -e "source('R/wdi_twitter_bot.R')"
