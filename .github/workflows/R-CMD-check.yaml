@@ -25,10 +25,16 @@ jobs:
           Rscript -e "install.packages(c('devtools','rtweet','tidyverse','ggthemes','gganimate','here','wbstats','Hmisc','ggthemes','scales','hrbrthemes'))"
       - name: Install github packages
         run:
-          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbggeo")"
+          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgdata")"
       - name: Install github packages2
         run:
-          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps")"
+          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgcharts")"
+      - name: Install github packages3
+          run:
+            Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
+      - name: Install github packages4
+        run:
+          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
       - name: Render r plot file
         run:
           Rscript -e "source('R/wdi_twitter_bot.R')"
