@@ -20,14 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
-      - name: Install dependencies
-        run: |
-          install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
+      - name: Install packages
+        run:
+          Rscript -e "install.packages(c('rtweet','tidyverse','ggthemes','gganimate','here','wbstats','Hmisc','ggthemes','scales','hrbrthemes'))"
+      - name: Install github packages
+        run:
+          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbggeo")"
+          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps")"
       - name: Render r plot file
         run:
-          Rscript -e "source('R/wdi_twitter_bot.R')"        
-      - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
-        shell: Rscript {0}
+          Rscript -e "source('R/wdi_twitter_bot.R')"
