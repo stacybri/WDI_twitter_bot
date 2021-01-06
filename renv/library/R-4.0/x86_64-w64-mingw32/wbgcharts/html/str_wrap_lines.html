@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Wrap a vector of strings to a specified number of lines</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for str_wrap_lines {wbgcharts}"><tr><td>str_wrap_lines {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Wrap a vector of strings to a specified number of lines</h2>
+
+<h3>Description</h3>
+
+<p>Like <code>stringr::str_wrap()</code> except that instead of specifying a width you
+specify a &quot;height&quot; (ie. a number of lines that each string can occupy). The
+longest string and &quot;height&quot; will jointly determine the width, which will then
+be applied to the other strings - so that strings are not unnecessarily wrapped.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+str_wrap_lines(strings, lines = 2, indent = 0, exdent = 0,
+  force = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>force</code></td>
+<td>
+<p>Force strings to take up <code>lines</code> lines, even if they could
+fit the width with fewer lines</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

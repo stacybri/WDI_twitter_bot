@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A breaks function for ggplot2 scales that shows the data...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for bracketed_breaks {wbgcharts}"><tr><td>bracketed_breaks {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A breaks function for ggplot2 scales that shows the data limits</h2>
+
+<h3>Description</h3>
+
+<p>This builds on the standard ggplot2 continuous breaks (extended breaks)
+function to make sure the data limits, given as a parameter, are included
+in the breaks.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bracketed_breaks(limits, at = 1, closeness_threshold = 0.1,
+  breaker = scales::extended_breaks())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>limits</code></td>
+<td>
+<p>A pair of limits, overrides the default</p>
+</td></tr>
+<tr valign="top"><td><code>at</code></td>
+<td>
+<p>To limit the breaks to be on 5s, 10s, etc (more of a hint)</p>
+</td></tr>
+<tr valign="top"><td><code>closeness_threshold</code></td>
+<td>
+<p>If one of the data limit breaks and one of the
+default breaks will be closer than closeness_threshold * the ggplot2
+calculated limits, the the nearby default break will be dropped.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>By default it will try to use the limits ggplot provides, but by default those
+are extended by the expand argument of scales, so it will use the integral
+ceiling and floor respectively of these. Usually this will work. If not you
+can provide limits to override.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

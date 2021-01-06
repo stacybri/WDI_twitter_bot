@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: (Better) Convert Numeric to Factor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for supercut {wbggeo}"><tr><td>supercut {wbggeo}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>(Better) Convert Numeric to Factor</h2>
+
+<h3>Description</h3>
+
+<p>Like <code>cut</code>, <code>supercut</code> divides the range of x into intervals and
+codes the values in x according to the interval in which they fall. Unlike
+<code>cut</code>, it understands mathematical interval notation so you can be very
+precise with how the intervals are constructed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+supercut(x, intervals, labels = NULL, ordered_result = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a numeric vector which is to be converted to a factor by supercutting</p>
+</td></tr>
+<tr valign="top"><td><code>intervals</code></td>
+<td>
+<p>a vector of string intervals, see Details and Examples</p>
+</td></tr>
+<tr valign="top"><td><code>labels</code></td>
+<td>
+<p>labels (if not given names(intervals) will be used if set)</p>
+</td></tr>
+<tr valign="top"><td><code>ordered_result</code></td>
+<td>
+<p>logical: should the result be an ordered factor?</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The intervals are strings being either a single number (e.g. &quot;10&quot;), which
+will be assigned to only that value, or an interval (e.g. &quot;[10,20]&quot;), which
+will be assigned to any value in that interval. Open (&quot;(1,5)&quot;), closed
+(&quot;[1,5]&quot;) and mixed (&quot;[1,5)&quot;) intervals are supported. To create an interval
+which is open below, use e.g. &quot;(-Inf, 5]&quot; and for an interval which is open
+above use e.g. &quot;(20, Inf)&quot;.
+</p>
+<p>If a value in <code>x</code> doesn't match any interval, a warning will be issued.
+</p>
+<p>If intervals overlap behaviour is unspecified (don't do this!)
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/cut.html">cut</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+supercut(mtcars$hp, c(
+  "less than 110 hp" = "(-Inf,110)",
+  "exactly 110 hp"   = "110",
+  "110 - 200 hp"     = "(110,200)",
+  "200 hp and over"  = "[200, Inf)"
+))
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>wbggeo</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

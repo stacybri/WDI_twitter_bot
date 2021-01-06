@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A geom for the other kind of dotplot, with a connecting line</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for geom_other_dotplot {wbgcharts}"><tr><td>geom_other_dotplot {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A geom for the other kind of dotplot, with a connecting line</h2>
+
+<h3>Description</h3>
+
+<p>This is still a fairly hacky way to make dotplots, so you have to observe
+and obey some weirdness, which is outlined below. Also, the &quot;direction&quot;
+(usually time) of the data is dictated by the row ordering in the data frame,
+so make sure it is sorted correctly.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+geom_other_dotplot(mapping = aes(), linecolor = "black", linesize = 0.25,
+  arrow = NA, flip.legend = FALSE, size = 1, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>Complicatedly, you must specify x (the value axis), y (the
+categorical axis) and group in the geom's own mapping argument, even if
+you specify them in the main ggplot() call. If the chart is faceted, you
+need to also include the facetting variable as part of the group (use paste0).</p>
+</td></tr>
+<tr valign="top"><td><code>linecolor</code></td>
+<td>
+<p>The color of the grouping line</p>
+</td></tr>
+<tr valign="top"><td><code>linesize</code></td>
+<td>
+<p>The size of the grouping line</p>
+</td></tr>
+<tr valign="top"><td><code>arrow</code></td>
+<td>
+<p>NA or FALSE for no arrow, TRUE for a standard arrow, or pass
+a grob for something weird and wonderful. For reverse direction groups, the</p>
+</td></tr>
+<tr valign="top"><td><code>flip.legend</code></td>
+<td>
+<p>By default the legend will show the arrow facing forward,
+but if most the groups run backwards it may be helpful to show the arrow
+backwards too, so you can set this to TRUE to do that.</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>The size of the points &amp; arrows if used.</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

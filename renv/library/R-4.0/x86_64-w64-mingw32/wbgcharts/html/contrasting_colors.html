@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Select contrasting text colors, from a list, for a set of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for contrasting_colors {wbgcharts}"><tr><td>contrasting_colors {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Select contrasting text colors, from a list, for a set of fill colors</h2>
+
+<h3>Description</h3>
+
+<p>Given a (possibly named) vector of fill (background) colors, this function
+returns a (possibly named) vector of highest-contrast text (foreground)
+colors, from a list of potential text colors (usually two is sufficient).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+contrasting_colors(fillcolors, textcolors = c("black", "white"),
+  biases = c(0, 2))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>biases</code></td>
+<td>
+<p>added to the &quot;true&quot; contrast ratios to bias the selection</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

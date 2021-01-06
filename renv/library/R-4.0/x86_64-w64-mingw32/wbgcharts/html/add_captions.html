@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add captions (title, notes, etc) to a plot or grid graphics...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_captions {wbgcharts}"><tr><td>add_captions {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add captions (title, notes, etc) to a plot or grid graphics object (grob)</h2>
+
+<h3>Description</h3>
+
+<p><code>add_captions</code> adds captions to a plot outside of <code>ggplot</code>. This is
+useful since the default <code>ggplot</code> title, subtitle and caption align with
+the plot area, rather than the entire figure (including axes),
+unlike many publishing standards.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+add_captions(plot, theme, title = NULL, subtitle = NULL, note = NULL,
+  source = NULL, source_url = NULL, show.logo = TRUE,
+  padding = margin(0, 0, 0, 0, "pt"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>plot</code></td>
+<td>
+<p>the <code>ggplot</code> plot object or a grid grob</p>
+</td></tr>
+<tr valign="top"><td><code>theme</code></td>
+<td>
+<p>the <code>ggplot</code> theme object to use for styling captions</p>
+</td></tr>
+<tr valign="top"><td><code>title</code></td>
+<td>
+<p>the plot title (displayed at top)</p>
+</td></tr>
+<tr valign="top"><td><code>subtitle</code></td>
+<td>
+<p>the plot subtitle</p>
+</td></tr>
+<tr valign="top"><td><code>note</code></td>
+<td>
+<p>the plot note</p>
+</td></tr>
+<tr valign="top"><td><code>source</code></td>
+<td>
+<p>the plot source</p>
+</td></tr>
+<tr valign="top"><td><code>source_url</code></td>
+<td>
+<p>the plot source URL or other location info</p>
+</td></tr>
+<tr valign="top"><td><code>show.logo</code></td>
+<td>
+<p>if TRUE, include a logo</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>title</code> and <code>subtitle</code> arguments correspond directly to the
+same in <code>title</code>, and appear above the plot. The <code>note</code> and
+<code>source</code> arguments share the work of <code>ggplot</code>'s <code>caption</code> and
+appear below the plot. The <code>source_url</code> and logo appear at the very
+bottom of the plot, in slightly smaller text, and would usually only be
+shown in standalone, branded graphics (for e.g. distribution on social media)
+and not, for instance, within a report.
+</p>
+<p>The relevant theme elements within <code>theme</code> are the same as would be used
+if the the <code>ggplot</code> title, subtitle and caption were used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a new <code>gtable</code> object which can be <code>print</code>ed to a graphic device
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(ggplot2)
+library(grid)
+
+# Simple example for adapting a ggplot labs() call...
+p &lt;- ggplot(mtcars, aes(cyl, mpg)) + geom_point()
+
+p + labs(
+  title = "This is a title",
+  subtitle = "This is a subtitle",
+  caption = "This is a caption"
+)
+
+# ...to use add_captions() instead
+g &lt;- add_captions(
+  plot = p,
+  theme = p$theme,
+  title = "This is a title",
+  subtitle = "This is a subtitle",
+  note = "Note: This is a note",
+  source = "Note: This is a source",
+  source_url = "http://where.this.is.found.com",
+  show.logo = TRUE
+)
+grid.newpage()
+grid.draw(g)
+
+# Some relevant text attributes of ggplot themes are obeyed
+p &lt;- ggplot(mtcars, aes(cyl, mpg)) + geom_point() +
+  theme_classic() + theme(plot.title = element_text(color = "blue"))
+
+p + labs(
+  title = "This is a title",
+  subtitle = "This is a subtitle",
+  caption = "This is a caption"
+)
+
+g &lt;- add_captions(
+  plot = p,
+  theme = p$theme,
+  title = "This is a title",
+  subtitle = "This is a subtitle",
+  note = "Note: This is a note",
+  source = "Note: This is a source",
+  show.logo = FALSE
+)
+grid.newpage()
+grid.draw(g)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

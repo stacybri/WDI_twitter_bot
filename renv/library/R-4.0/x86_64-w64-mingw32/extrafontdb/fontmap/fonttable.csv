@@ -1,0 +1,4 @@
+"package","afmfile","fontfile","FullName","FamilyName","FontName","Bold","Italic","Symbol","afmsymfile"
+NA,"RobotoCondensed-Bold.afm.gz","C:\Users\wb469649\OneDrive - WBG\Documents\R\win-library\4.0\hrbrthemes\fonts\roboto-condensed\RobotoCondensed-Bold.ttf","Roboto Condensed Bold","Roboto Condensed","RobotoCondensed-Bold",TRUE,FALSE,FALSE,NA
+NA,"RobotoCondensed-Light.afm.gz","C:\Users\wb469649\OneDrive - WBG\Documents\R\win-library\4.0\hrbrthemes\fonts\roboto-condensed\RobotoCondensed-Light.ttf","Roboto Condensed Light","Roboto Condensed","RobotoCondensed-Light",FALSE,FALSE,FALSE,NA
+NA,"RobotoCondensed-Regular.afm.gz","C:\Users\wb469649\OneDrive - WBG\Documents\R\win-library\4.0\hrbrthemes\fonts\roboto-condensed\RobotoCondensed-Regular.ttf","Roboto Condensed Regular","Roboto Condensed","RobotoCondensed-Regular",FALSE,FALSE,FALSE,NA

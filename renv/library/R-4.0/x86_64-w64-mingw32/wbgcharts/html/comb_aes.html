@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Combine factors for a single 'ggplot' aesthetic</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for comb_aes {wbgcharts}"><tr><td>comb_aes {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Combine factors for a single <code>ggplot</code> aesthetic</h2>
+
+<h3>Description</h3>
+
+<p>Combine factors for a single <code>ggplot</code> aesthetic
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+comb_aes(...)
+
+comb_aes_values(..., FUN, not.found = NA)
+</pre>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Suppose we want a fill that uses two variables
+p &lt;- ggplot(
+  diamonds[1:10,],
+  aes(depth, price, color = comb_aes(cut, color))
+) +
+  geom_point()
+p
+
+# If we have labels set up for each of the factors, we can combine them
+# (although this doesn't offer much advantage over using a function for
+# the label argument).
+
+cut.labels &lt;- setNames(as.character(unique(diamonds$cut)), unique(diamonds$cut))
+color.labels &lt;- c(
+  D = "D (best)", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J (best)"
+)
+labels &lt;- comb_aes_values(diamonds$cut, diamonds$color, FUN =
+  function(cut, color) {
+    paste0(cut.labels[[cut]], " / ",color.labels[[color]])
+  }
+)
+p + scale_color_discrete(labels = labels)
+
+# More usefully, we can do the same with other aesthetics (e.g. color) to
+# create multi-dimensional color scales.
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a new figure</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for figure {wbgcharts}"><tr><td>figure {wbgcharts}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a new figure</h2>
+
+<h3>Description</h3>
+
+<p>A figure is a reuseable, parameterisable, retargetable chunk of analysis and
+graphical output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+figure(data, plot, theme = NULL, aspect_ratio = 1, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a function that takes no arguments and returns the data that will
+be plotted (either a dataframe or a list of named dataframes).</p>
+</td></tr>
+<tr valign="top"><td><code>plot</code></td>
+<td>
+<p>a function that takes the data to plot as its first argument, and
+graphical parameters as subsequent arguments, and returns either a ggplot
+object or a grob.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other metadata, for example <code>title</code>, <code>subtitle</code>, etc.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Usually <code>figure</code> is called within a function, where content parameters
+can be specified to change what is shown in the figure (see Examples).
+</p>
+<p>Purely graphical parameters should be restricted to the plot function.
+</p>
+<p>In general most data transformations should occur in <code>data</code>, however,
+transformations that are purely for presentation purposes (e.g. reordering
+a factor) may occur in <code>plot</code>. Use your judgment - the output of
+<code>data</code> may be made available to readers/viewers as the &quot;Download the
+data for this figure&quot;, so it should be obvious how to get from that to the
+chart.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(ggplot2)
+library(dplyr)
+
+# Minimal example
+f &lt;- figure(
+  data = function() { mtcars },
+  plot = function(df) { ggplot(df, aes(cyl, mpg)) + geom_point() }
+)
+f
+
+# More typical example, enclosed in function with parameter, and metadata
+fig_cars &lt;- function(auto_manual = c(0, 1)) {
+  figure(
+    data = function() { mtcars %&gt;% filter(am %in% auto_manual) },
+    plot = function(df) { ggplot(df, aes(cyl, mpg)) + geom_point() },
+    title = "Cars with more cylinders are less fuel efficient",
+    subtitle = "Miles per gallon vs engine cylinders",
+    source = "Henderson and Velleman (1981)"
+  )
+}
+fig_cars()
+fig_cars(auto_manual = 0)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>wbgcharts</em> version 0.1.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

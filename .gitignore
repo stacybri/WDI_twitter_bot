@@ -59,8 +59,7 @@
 !/**/**/*.R
 !/**/**/*.Rmd
 !renv*
-!renv/*
-!renv/*/*
+!renv/library/
 
 # HTML files
 !/**/**/*.html

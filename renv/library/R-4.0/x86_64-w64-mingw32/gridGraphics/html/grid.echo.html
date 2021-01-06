@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Echo 'graphics' output using 'grid' graphics</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for grid.echo {gridGraphics}"><tr><td>grid.echo {gridGraphics}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Echo <span class="pkg">graphics</span> output using <span class="pkg">grid</span> graphics
+</h2>
+
+<h3>Description</h3>
+
+<p>Convert a scene that was drawn using the <span class="pkg">graphics</span> package
+to an identical scene drawn with the <span class="pkg">grid</span> package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+grid.echo(x = NULL, newpage = TRUE, prefix = NULL, device = offscreen)
+
+echoGrob(x = NULL, prefix = NULL, device = offscreen, name = NULL) 
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>Either <code>NULL</code>, a recorded plot, or a function.
+If <code>NULL</code>, the current graphics device is echoed.
+</p>
+</td></tr>
+<tr valign="top"><td><code>newpage</code></td>
+<td>
+
+<p>A logical value indicating whether to start a new page.  If
+<code>FALSE</code>, echoing occurs in the current <span class="pkg">grid</span> viewport.
+</p>
+</td></tr>
+<tr valign="top"><td><code>prefix</code></td>
+<td>
+
+<p>A character value used as a prefix for all grob and viewport names.
+The default prefix is <code>"graphics"</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>device</code></td>
+<td>
+
+<p>A function that opens a graphics device for <code>grid.echo()</code> to
+work on.  By default this is an off-screen, in-memory device
+based on the <code>pdf</code> device.  This default device may not be
+satisfactory when using custom fonts.
+</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+
+<p>A character identifier.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If the first argument is a function, it must be a function with zero
+arguments.  If the function needs access to non-global data,
+use a closure.
+The function should not call functions that create or destroy graphics
+devices, or change the current graphics device.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>echoGrob</code> function returns a grob that will echo <code>x</code>
+when it is drawn.
+</p>
+<p>The <code>grid.echo</code> function is called for its side-effect of drawing on the
+current graphics device.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Paul Murrell
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Echo existing drawing
+plot(1)
+grid.echo()
+
+# Echo result of call to a plotting function
+plotfun &lt;- function() plot(1:10)
+grid.echo(plotfun)
+
+# Echo result of a plotting function (anonymous) into current viewport
+grid.newpage()
+pushViewport(viewport(x=0, width=.5, just="left"))
+grid.rect(gp=gpar(col=NA, fill="grey"))
+grid.echo(function() plot(1:10), newpage=FALSE)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gridGraphics</em> version 0.5-1 <a href="00Index.html">Index</a>]</div>
+</body></html>
