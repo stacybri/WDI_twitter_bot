@@ -17,24 +17,23 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
-      - name: Install packages
-        run:
-          Rscript -e "install.packages(c('devtools','rtweet','tidyverse','ggthemes','gganimate','here','wbstats','Hmisc','ggthemes','scales','hrbrthemes'))"
-      - name: Install github packages
-        run:
-          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgdata")"
-      - name: Install github packages2
-        run:
-          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgcharts")"
-      - name: Install github packages3
-        run:
-          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
-      - name: Install github packages4
-        run:
-          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
+      - name: Cache packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
       - name: Render r plot file
         run:
           Rscript -e "source('R/wdi_twitter_bot.R')"
