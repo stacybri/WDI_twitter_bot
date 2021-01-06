@@ -30,8 +30,8 @@ jobs:
         run:
           Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgcharts")"
       - name: Install github packages3
-          run:
-            Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
+        run:
+          Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
       - name: Install github packages4
         run:
           Rscript -e "devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps"
