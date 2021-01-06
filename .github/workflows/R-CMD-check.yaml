@@ -32,9 +32,19 @@ jobs:
         shell: Rscript {0}
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::install('wbggeo')
-          renv::install('wbgmaps')
-          renv::restore()
+          install.packages('devtools')
+          install.packages('rtweet')
+          install.packages('tidyverse')
+          devtools::install_github("worldbank/wbgviz", subdir = "wbggeo")
+          devtools::install_github("worldbank/wbgviz", subdir = "wbgmaps")
+          install.packages('ggthemes')
+          install.packages('gganimate')
+          install.packages('here')
+          install.packages('wbstats')
+          install.packages('Hmisc')
+          install.packages('ggthemes')
+          install.packages('scales')
+          install.packages('hrbrthemes')
       - name: Render r plot file
         run:
           Rscript -e "source('R/wdi_twitter_bot.R')"
