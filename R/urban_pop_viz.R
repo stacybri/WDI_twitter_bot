@@ -21,8 +21,10 @@ dir <- here()
 #read in twitter api info
 source(paste(dir,'passwords.R',sep="/"), local=TRUE)
 
+wdi_ind <- 'NY.GDP.MKTP.KD.ZG'
 
-
+for (wdi_ind in c('SL.AGR.EMPL.ZS', 'SP.URB.TOTL.IN.ZS', 'SL.EMP.VULN.ZS')) {
+gc()
 # create token named "twitter_token"
 twitter_token <- create_token(
   app = appname,
@@ -52,140 +54,24 @@ indicator_metadata <- wb_indicators() %>%
 
 wdi_mapper  <- function(data, indicator, title,text) {
   
-
+  
   
   
   map_df <- get(data)
   
-
   
-  if (rand_num==1) {
-      p <- ggplot() +
-        geom_map(data = map_df, aes(map_id = iso3c, fill = value), map = maps$countries) + 
-        geom_polygon(data = maps$disputed, aes(long, lat, group = group, map_id = id), fill = "grey80") + 
-        geom_polygon(data = maps$lakes, aes(long, lat, group = group), fill = "white")  +
-        geom_path(data = maps$boundaries,
-                  aes(long, lat, group = group),
-                  color = "white",
-                  size = 0.1,
-                  lineend = maps$boundaries$lineend,
-                  linetype = maps$boundaries$linetype) +
-        scale_x_continuous(expand = c(0, 0), limits = standard_crop_wintri()$xlim) +
-        scale_y_continuous(expand = c(0, 0), limits = standard_crop_wintri()$ylim) +
-        scale_fill_distiller(palette = "Blues",
-                             direction=1,
-                             breaks = pretty_breaks(n = 5)
-                             )  +
-        coord_equal() +
-        theme_map(base_size=12) +
-        labs(
-          title=str_wrap(title,100),
-          subtitle= 'Data Point is for last year available',
-          caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
-          fill='WDI Indicator Value'
-            )
-  } else if (rand_num==2) {
-  #add histogram by region 
-      p <- map_df %>%
-        group_by(region) %>%
-        filter(region!='Aggregates') %>%
-        mutate(Value= wtd.mean(value, weights = population, na.rm=T),
-               Label = paste(scales::comma(round(Value,1)))) %>%
-        ggplot(aes(x=Value, y=region, fill=region)) +
-        geom_bar(stat="identity",position='dodge') +
-        geom_text(aes(label=Label)) +
-        labs(
-          title=str_wrap(paste(title, 'By Region', sep=" - "),100),
-          caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
-          subtitle= 'Data Point is for last year available',
-          fill='Region'
-        ) +
-        ylab('Region') +
-        theme_bw() +
-        theme(legend.position = 'top')
-  } else if (rand_num==3) {
-  
-  #by income
-    
-  income <- c("Low income", "Lower middle income","Upper middle income","High income")
-  
-  p <- map_df %>%
-    group_by(income_level) %>%
-    filter(region!='Aggregates') %>%
-    mutate(Value=wtd.mean(value, weights = population, na.rm=T),
-           Label = paste(scales::comma(round(Value,1)))) %>%
-    ggplot(aes(x=Value, y=income_level, fill=income_level)) +
-    geom_bar(stat="identity",position='dodge') +
-    geom_text(aes(label=Label)) +
-    labs(
-      title=str_wrap(paste(title, 'By Income', sep=" - "),100),
-      caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
-      subtitle= 'Data Point is for last year available',
-      fill="Income Group"
-    ) +
-    scale_y_discrete(limits = income) +
-    ylab('Income') +
-    theme_bw() +
-    theme(legend.position = 'top')
-
-  }  else if (rand_num==4) {
-    #stacked area plot by region
-    
-    #pull data
-    wdi_df <- wb_data(
-      indicator=ind,
-      country='regions_only',
-      start_date=2000,
-      end_date=2020,
-      mrv=20,
-      gapfill=TRUE,
-      return_wide = F
-    ) 
-    
-    if (length(unique(wdi_df$country))<2) {
-      wdi_df <- wb_data(
-        indicator=ind,
-        country='admin_regions_only',
-        start_date=2000,
-        end_date=2020,
-        mrv=20,
-        gapfill=TRUE,
-        return_wide = F
-      ) 
-    } #try admin regions for data
-    
-    
-    p <- wdi_df %>%
-      arrange(-date) %>%
-      mutate(
-        Label = if_else(date %in% c(last(date),first(date)),
-                        paste(scales::comma(value, accuracy=0.1)),
-                        "")) %>%
-      ggplot(aes(x=date, y=value, fill=country, label=Label)) +
-      geom_area() +
-      geom_text(size = 4, position = position_stack(vjust = 0.5)) +
-      labs(
-        title=str_wrap(paste(title, 'By Region', sep=" - "),80),
-        caption = paste('Source: World Bank World Development Indicators. ', ind,sep=""),
-        subtitle= 'Data Point is for last year available',
-        fill='Region'
-      ) +
-      ylab('value') +
-      scale_fill_tableau() +
-      theme_ipsum() +
-      theme(legend.position = 'top')
-    
-  } else if (rand_num==5) {
     wdi_df <- wb_data(
       indicator=ind,
       country='countries_only',
-      start_date=2000,
+      start_date=1991,
       end_date=2020,
-      mrv=20,
+      mrv=30,
       gapfill=TRUE,
       return_wide = F
     ) %>%
-      mutate(date=as.integer(date))
+      mutate(value=if_else(!(abs(value - median(value, na.rm=T)) > 2*sd(value, na.rm=T)),value,as.numeric(NA))) %>%
+      mutate(date=as.integer(date)) 
+      
     
     p <- ggplot() +
       geom_map(data = wdi_df, aes(map_id = iso3c, fill = value, group=date), map = maps$countries) + 
@@ -199,9 +85,9 @@ wdi_mapper  <- function(data, indicator, title,text) {
                 linetype = maps$boundaries$linetype) +
       scale_x_continuous(expand = c(0, 0), limits = standard_crop_wintri()$xlim) +
       scale_y_continuous(expand = c(0, 0), limits = standard_crop_wintri()$ylim) +
-      scale_fill_distiller(palette = "Blues",
+      scale_fill_distiller(palette = "blues",
                            direction=1,
-                           breaks = pretty_breaks(n = 5)
+                           breaks = pretty_breaks(n = 7)
       )  +
       coord_equal() +
       theme_map(base_size=18) +
@@ -214,25 +100,25 @@ wdi_mapper  <- function(data, indicator, title,text) {
       transition_time(date)
     
     
-  }
-
   
- 
- 
- tmp <- tempfile(fileext = ".png")
- 
- if (rand_num!=5) {
-  ggsave(tmp, p, width=10, height=8)
- } else if (rand_num==5) {
-   
-   animate(p, nframes=100, width=800, height=600 )
-   anim_save(tmp)
-   
- }
-
- post_tweet(status=text,
-            media=tmp)
- 
+  
+  
+  
+  
+  tmp <- tempfile(fileext = ".png")
+  
+  if (rand_num!=5) {
+    ggsave(tmp, p, width=10, height=8)
+  } else if (rand_num==5) {
+    
+    animate(p, nframes=200, width=800, height=600 )
+    anim_save(tmp)
+    
+  }
+  
+  post_tweet(status=text,
+             media=tmp)
+  
 }
 
 
@@ -246,12 +132,12 @@ final_tweet_df<- read_csv( paste(dir,'tweets_database.csv',sep="/"))
 
 #choose 5 randomly selected indicators
 indicators_selected_df <- indicator_metadata %>%
-  sample_n(2)
+  filter(indicator_id==wdi_ind)
 
 #population data
 pop_df <- wb_data(
   indicator='SP.POP.TOTL',
-  start_date=2000,
+  start_date=1961,
   end_date=2020,
   mrv=1,
   return_wide = F
@@ -290,7 +176,7 @@ for (ind in (indicators_selected_df$indicator_id)) {
   }
   
   #get data
-
+  
   #pull data
   wdi_df <- wb_data(
     indicator=ind,
@@ -309,12 +195,12 @@ for (ind in (indicators_selected_df$indicator_id)) {
     filter(!is.na(value)) %>%
     ungroup() %>%
     summarise(pop_cov=sum(population, na.rm=T)/max(total_pop))
-    
+  
   #randomly choose either a map, bar chart by region , or bar chart by income
-  rand_num <- sample(1:5,1)
+  rand_num <- 5
   
   #make sure popualation coverage at least 40%
-  if (pop_cov$pop_cov >= 0.4) {
+  
     
     wdi_mapper('wdi_df',ind,title,text )
     
@@ -341,12 +227,12 @@ for (ind in (indicators_selected_df$indicator_id)) {
     
     final_tweet_df <- final_tweet_df %>%
       bind_rows(tweet_df)
-  
-  }
-  
+    
   
   
-
+  
+  
+  
   
 }
 
@@ -356,3 +242,4 @@ write_excel_csv(final_tweet_df, paste(dir,'tweets_database.csv',sep="/"))
 # rt <- search_tweets("World Development Indicators")
 # r <- lapply(rt$user_id, post_favorite)
 
+}
